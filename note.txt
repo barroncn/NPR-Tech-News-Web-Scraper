@@ -1,0 +1,9 @@
+URI string that connects Mongoose to mLab
+When you’re ready to connect Mongoose with your remote database, you'll need to add it as an environment variable on Heroku (see instructions on GitLab)
+MONGODB_URI: mongodb://heroku_js3dwzmf:oie62h9a583s7dv964173sfsd7@ds245337.mlab.com:45337/heroku_js3dwzmf
+
+VIEWS FOLDER!
+
+finish models (Note and Article)
+Test.....NO IDEA IF THE DATABASE CONNECTION URL IS CORRECT
+We are scraping data into objects correctly, but it says db is undefined (unhandled promise rejection)
