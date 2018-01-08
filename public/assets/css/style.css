@@ -1,5 +1,9 @@
 body{
-    background-image: url("/assets/photos/tech4.jpg");
+    background-color: #111c31;
+    background-image: url("/assets/photos/tech7.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100vw
 }
 
 .nav{
@@ -15,12 +19,16 @@ h1{
 h3,
 h2{
     color:white;
+    font-weight: normal;
 }
 
 #scrapeNew{
     padding:8px;
+    margin-right: 7px;
+    margin-left: 8px;
 }
 
+#noArticlesHomeLink:hover,
 #scrapeNew:hover{
     cursor: pointer;
 }
@@ -29,8 +37,9 @@ h2{
 .results{
     background-color: #111c31;
     padding: 20px;
-    height: 55vh;
+    height: 50vh;
     text-align:center;
+    border-top: solid 25px #111c31;
 }
 
 #mainLogo{
@@ -38,12 +47,13 @@ h2{
 }
 
 .nav-link:visited{
-	color: #006ce0;
+	color: white;
 	text-decoration: none;
 }
 
+#noArticlesHomeLink:hover,
 .nav-link:hover{
-    color: #2550d3;
+    color: #8a99c4;
 }
 
 .card-header{

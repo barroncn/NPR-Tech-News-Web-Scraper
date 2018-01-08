@@ -19,7 +19,7 @@ router.get("/", function(req, res) {
             //If there is no data sent back (no unsaved articles in the database)
             if (data.length === 0) {
                 //The noResults message is rendered on the index.handlebars page
-                res.render("index", { noResults: "Click the 'Scrape New Articles' button to get the latest NPR Tech News." });
+                res.render("index", { noResults: "Click the 'Scrape New Articles' button to get the latest NPR Tech News!" });
             }
             else {
                 //The results data is rendered on the index.handlebars page
@@ -40,7 +40,7 @@ router.get("/saved", function(req, res) {
             //If there is no data sent back (no saved articles in the database)
             if (data.length === 0) {
                 //The noResults message is rendered onthe saved.handlebars page
-                res.render("saved", { noResults: "There are no saved articles." });
+                res.render("saved", { noResults: "No saved articles yet...head to the <span id='noArticlesHomeLink'>Home Page</span> to save your favorites!" });
             }
             else {
                 //The results data is rendered on the saved.handlebars page
