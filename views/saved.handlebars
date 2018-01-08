@@ -1,0 +1,13 @@
+{{!--Page with User's Saved Articles--}}
+{{#each results}}
+    <div class="card some-results">
+      <h3 class="card-header"><a class="artTitle" href="{{this.link}}" target="_blank">{{this.title}}</a></h3>
+      <div class="card-block">
+        <h4 class="card-text">{{this.summary}}</h4>
+        <button class="savedarticlenotes rounded float-left" data-artid="{{this._id}}" data-noteid="{{this.note.type}}"><i class="fa fa-plus" aria-hidden="true"></i> Article Notes</button>
+        <form action="/saved/{{this._id}}" method="POST">
+            <button type="submit" class="deleteSaved rounded"><i class="fa fa-minus" aria-hidden="true"></i> Delete From Saved</button>
+        </form>
+      </div>
+    </div>
+{{/each}}

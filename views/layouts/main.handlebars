@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title>NPR Technology News Webscraper</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://use.fontawesome.com/8bd2ed03e6.js"></script>
+        <link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    </head>
+    <body style="overflow:hidden">
+        
+        <!-- Modal -->
+        <div class="modal fade" id="articleNotesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Article Note:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    <div id="modalNotes">
+                    </div>
+                    <textarea class="form-control mod" id="textarea" rows="3" placeholder="Update notes here..."></textarea>
+              </div>
+              <div class="modal-footer">
+                <span id="noMessage">Oops! There's no note to save!</span><button id="addnote" type="button" class="btn btn-primary">Save Note</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {{!--Navigation Bar--}}
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/saved">Saved Articles</a>
+            </li>
+            <li class="nav-item">
+                <form action="/scrape" method="GET">
+                    <button type="submit" id="scrapeNew"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Scrape New Articles</button>
+                </form>
+            </li>
+        </ul>
+        
+        {{!--Main Title--}}
+        <div class="container">
+            <br>
+            <br>
+            <div id="mainLogo">
+                <h1><img src="./assets/photos/npr1.gif">  Technology Webscraper</h1>
+            </div>
+        </div>
+        
+        {{!--Results--}}
+        <div class="fixed-bottom results" style="overflow-y:auto">
+            <div id="noResults">
+                <h2>{{noResults}}</h2>
+            </div>
+            {{{body}}}
+        </div>
+        
+        {{!--Client-Side JavaScript--}}
+        <script>
+            //Hide the div in the modal that will display a message if the user tries to submit a blank note
+            $("#noMessage").hide();
+            
+            //The showModal function will append the article's note from the database to the modal body
+            function showModal(data){
+                $("#modalNotes").empty();
+                //First, check to see if a note exists
+                if(data.note) {
+                    //If there is a note, append the necessary values
+                    $("#modalNotes").append("<div class='card mod'>" +
+                                                    "<div class='card-block notesDiv'>" +
+                                                        "<form action='/note/" + data.note._id +"' method='POST'>" + 
+                                                            "<button class='deleteNote btn btn-primary float-right del' type='submit'>" + 
+                                                                "<i class='fa fa-times' aria-hidden='true'></i>" + 
+                                                            "</button>" +
+                                                        "</form>" +
+                                                        data.note.body +
+                                                    "</div>" + 
+                                                    "<div id='articleinfo' style='display:none'>" + data._id + "</div>" +
+                                                "</div>");
+                    // Show the modal
+                    $('#articleNotesModal').modal('show');
+                }
+                else{
+                    //If there is no note, append "No notes yet" and the article _id value
+                    $("#modalNotes").append("<div class='card mod'>" +
+                                                "<div class='card-block notesDiv noNotesYet'>" +
+                                                    "No notes for this article yet!" +
+                                                "</div>" + 
+                                                "<div id='articleinfo' style='display:none'>" + data._id + "</div>" +
+                                            "</div>");
+                    $('#articleNotesModal').modal('show');
+                }
+            }
+            
+            //If the user clicks on the button to show article notes
+            $(".savedarticlenotes").on("click", function(){
+                //get the article database _id
+                var artID = $(this).attr("data-artid");
+                //make a GET request to /article/:id
+                $.ajax({
+                    url: "/article/" + artID,
+                    method: "GET"
+                }).done(function(data){
+                    //Once the request is complete, call the function to add the returned data to the modal before we show it
+                    showModal(data);
+                });
+            });
+            
+            //If the user clicks the button to delete a note from an article
+            // $(document).on("click", ".deleteNote", function(){
+            //     //get the note database _id and the article database _id
+            //     var notesID = $(this).attr("data-id");
+            //     // var artID = $("#articleinfo").text().trim();
+            //     //make a POST request to /note/:noteID/:articleID
+            //     $.ajax({
+            //         url: "/note/" + notesID,
+            //         method: "POST"
+            //     }).done(function(data){
+            //         //once the request is complete, reload the saved articles page (the modal will be closed)
+            //         location.assign("/saved");
+            //     });
+            // });
+            
+            //If the user clicks to save a new note
+            $("#addnote").on("click", function(){
+                //get the note text and the article database _id
+                var newnote = $("#textarea").val().trim();
+                var artID = $("#articleinfo").text();
+                //as long as the user entered something into the textarea
+                if(newnote !==""){
+                    //make a POST requestto /article/:id
+                    $.ajax({
+                        url: "/article/" + artID,
+                        method: "POST",
+                        data: {body: newnote}
+                    }).done(function(){
+                      //once the request is complete, reload the saved articles page (the modal will be close)
+                      location.assign("/saved");  
+                    });
+                }
+                //if the user left the text area blank
+                else{
+                    //show message requesting they enter a note
+                    $("#noMessage").show();
+                }
+            });
+            
+            // //If the user clicks to save an article
+            // $(".saveArticle").on("click", function(){
+            //     //get the article database _id
+            //     var id = $(this).attr("data-id");
+            //     // make a POST request to /saved/:id
+            //     $.ajax({
+            //         url: "/saved/" + id,
+            //         method: "POST",
+            //     }).done(function(){
+            //         //Once the request is complete, reload the home page (without saved articles)
+            //         location.assign("/");  
+            //     });
+            // })
+           
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        {{!--<script href="assets/javascript/app.js"></script>--}}
+    </body>
+</html>

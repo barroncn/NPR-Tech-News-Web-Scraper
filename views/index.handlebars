@@ -1,0 +1,13 @@
+{{!--Home Page with all Scraped Articles from Database--}}
+{{#each results}}
+    <div class="card some-results">
+      <h3 class="card-header"><a class="artTitle" href="{{link}}" target="_blank">{{title}}</a></h3>
+      <div class="card-block">
+        <h4 class="card-text">{{summary}}</h4>
+        <form action="/saved/{{_id}}" method="POST">
+            <button type="submit" class="saveArticle rounded"><i class="fa fa-bookmark-o" aria-hidden="true"></i> Save Article</button>
+        </form>
+      </div>
+    </div>
+{{/each}}
+

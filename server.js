@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var exphbs = require("express-handlebars");
 
 // Require all models
 var db = require("./models");
@@ -21,9 +22,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+//Handlebars
+//==============================================================
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+
 // Set mongoose to leverage built in Promises && Connect to Mongo DB---------------------------
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/webscraperTest", {
+mongoose.connect("mongodb://localhost/webscraperHW", {
     useMongoClient: true
 });
 mongoose.set('debug', true);
