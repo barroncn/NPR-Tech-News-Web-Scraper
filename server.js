@@ -33,9 +33,7 @@ mongoose.Promise = Promise;
 
 // If deployed, use the deployed database. Otherwise use the local webscraperHW database
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/webscraperHW";
-mongoose.connect(MONGODB_URI, {
-    useMongoClient: true
-});
+mongoose.connect(MONGODB_URI);
 mongoose.set('debug', true);
 
 // Routes--------------------------------------------------------------------------------------
