@@ -6,4 +6,4 @@ This web scraping app takes advantage of the NPR Technology News website in orde
 
 Technologies Used:
 
-Node.js | Express.js | MongoDB | Mongoose | Axios | Cheerio | Bulma
+Node.js | Express.js | MongoDB | Mongoose | Axios | Cheerio | Handlebars.js | Bootstrap
