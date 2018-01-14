@@ -1,4 +1,4 @@
-NPR Technology News Web Scraper
+# NPR Technology News Web Scraper
 
 [Check it out here!](https://still-cliffs-16819.herokuapp.com/)
 
